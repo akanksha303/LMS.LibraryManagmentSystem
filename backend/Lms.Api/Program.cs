@@ -100,7 +100,10 @@ if (app.Environment.IsDevelopment() || true) // Enable Swagger in prod too for t
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
-app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseCors("AllowReact");
 
