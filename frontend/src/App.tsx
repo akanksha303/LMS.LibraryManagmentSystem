@@ -7,6 +7,7 @@ import StudentDashboard from './pages/StudentDashboard';
 import Catalog from './pages/Catalog';
 import LibrarianDashboard from './pages/LibrarianDashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import Magazines from './pages/Magazines';
 
 // Route guards
 const ProtectedRoute: React.FC<{ children: React.ReactNode, allowedRoles?: string[] }> = ({ children, allowedRoles }) => {
@@ -50,6 +51,11 @@ const App: React.FC = () => {
           <Route path="/catalog" element={
             <ProtectedRoute allowedRoles={['Student', 'Librarian', 'Admin']}>
               <Catalog />
+            </ProtectedRoute>
+          } />
+          <Route path="/magazines" element={
+            <ProtectedRoute allowedRoles={['Student', 'Librarian', 'Admin']}>
+              <Magazines />
             </ProtectedRoute>
           } />
 

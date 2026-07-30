@@ -165,7 +165,10 @@ const StudentDashboard: React.FC = () => {
             </div>
 
             {/* Nav Item 3 */}
-            <div className="flex items-center gap-3.5 p-4 rounded-2xl cursor-pointer hover:bg-white/5 transition-all group">
+            <div 
+              onClick={() => navigate('/magazines')}
+              className="flex items-center gap-3.5 p-4 rounded-2xl cursor-pointer hover:bg-white/5 transition-all group"
+            >
               <FileText className="w-5 h-5 text-white/60 group-hover:text-white" />
               <div>
                 <div className="font-bold text-sm text-white/80 group-hover:text-white">My Magazines</div>
