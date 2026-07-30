@@ -2,21 +2,22 @@ version: '3.8'
 
 services:
   database:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: postgres:15-alpine
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=YourSecurePassword123!
+      - POSTGRES_DB=LmsDb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=YourSecurePassword123!
     ports:
-      - "1433:1433"
+      - "5432:5432"
     volumes:
-      - db-data:/var/opt/mssql
+      - db-data:/var/lib/postgresql/data
 
   backend-api:
     build:
       context: ./backend
       dockerfile: Lms.Api/Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=Server=database;Database=LmsDb;User Id=sa;Password=YourSecurePassword123!;TrustServerCertificate=True
+      - ConnectionStrings__DefaultConnection=Host=database;Database=LmsDb;Username=postgres;Password=YourSecurePassword123!
       - UseSQLite=false
       - Jwt__Key=YourSuperSecretProductionSigningKeyHere!!!
       - Jwt__Issuer=LmsServer

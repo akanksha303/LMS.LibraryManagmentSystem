@@ -15,7 +15,7 @@ namespace Lms.Infrastructure
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             
-            // Allow SQLite fallback if specified or if no SQL Server connection is provided
+            // Allow SQLite fallback if specified or if no connection is provided
             if (configuration["UseSQLite"] == "true" || string.IsNullOrWhiteSpace(connectionString))
             {
                 services.AddDbContext<LmsDbContext>(options =>
@@ -24,7 +24,7 @@ namespace Lms.Infrastructure
             else
             {
                 services.AddDbContext<LmsDbContext>(options =>
-                    options.UseSqlServer(connectionString));
+                    options.UseNpgsql(connectionString));
             }
 
             // Register repositories
