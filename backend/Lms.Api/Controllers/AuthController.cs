@@ -87,7 +87,7 @@ namespace Lms.Api.Controllers
             // Hardcoded fallback for demo credentials (guarantees access regardless of DB state)
             if (dto.Email == "student@lms.com" && dto.Password == "Student123!")
             {
-                var mockUser = new User { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Name = "Alice Student (Demo)", Email = "student@lms.com", UserName = "student@lms.com" };
+                var mockUser = new User { Id = Guid.Parse("11111111-1111-1111-1111-111111111111"), Name = "Akanksha", Email = "student@lms.com", UserName = "student@lms.com" };
                 var mockToken = _tokenGenerator.GenerateToken(mockUser, new[] { "Student" });
                 return Ok(new AuthResponseDto { Token = mockToken, Name = mockUser.Name, Email = mockUser.Email, Role = "Student", UserId = mockUser.Id });
             }
@@ -142,7 +142,7 @@ namespace Lms.Api.Controllers
                 // Fallback details for demo sessions
                 if (User.Identity?.Name == "student@lms.com")
                 {
-                    return Ok(new { id = Guid.Parse("11111111-1111-1111-1111-111111111111"), name = "Alice Student (Demo)", email = "student@lms.com", phone = "+15550199", department = "Computer Science", membershipDate = DateTime.UtcNow.AddMonths(-1), status = "Active", role = "Student" });
+                    return Ok(new { id = Guid.Parse("11111111-1111-1111-1111-111111111111"), name = "Akanksha", email = "student@lms.com", phone = "+15550199", department = "Computer Science", membershipDate = DateTime.UtcNow.AddMonths(-1), status = "Active", role = "Student" });
                 }
                 if (User.Identity?.Name == "librarian@lms.com")
                 {
