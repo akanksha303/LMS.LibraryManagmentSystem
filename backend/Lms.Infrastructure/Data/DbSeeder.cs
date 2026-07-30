@@ -67,7 +67,7 @@ namespace Lms.Infrastructure.Data
                 {
                     UserName = studentEmail,
                     Email = studentEmail,
-                    Name = "Alice Student",
+                    Name = "Akanksha",
                     PhoneNumber = "+15550199",
                     Department = "Computer Science",
                     Status = "Active",
@@ -76,97 +76,109 @@ namespace Lms.Infrastructure.Data
                 await userManager.CreateAsync(studentUser, "Student123!");
                 await userManager.AddToRoleAsync(studentUser, "Student");
             }
+            else
+            {
+                studentUser.Name = "Akanksha";
+                await userManager.UpdateAsync(studentUser);
+            }
 
             // Seed Books
-            if (!await context.Books.AnyAsync())
+            var booksToSeed = new List<Book>
             {
-                var books = new List<Book>
+                new Book
                 {
-                    new Book
-                    {
-                        Id = Guid.NewGuid(),
-                        ISBN = "9780134685991",
-                        Title = "Effective Java",
-                        Author = "Joshua Bloch",
-                        Publisher = "Addison-Wesley",
-                        Category = "Programming",
-                        Edition = "3rd Edition",
-                        Language = "English",
-                        TotalCopies = 10,
-                        AvailableCopies = 9,
-                        RackLocation = "A-32",
-                        CoverImage = "https://images-na.ssl-images-amazon.com/images/I/41r8QdAXsJL._SX379_BO1,204,203,200_.jpg"
-                    },
-                    new Book
-                    {
-                        Id = Guid.NewGuid(),
-                        ISBN = "9780132350884",
-                        Title = "Clean Code",
-                        Author = "Robert C. Martin",
-                        Publisher = "Prentice Hall",
-                        Category = "Programming",
-                        Edition = "1st Edition",
-                        Language = "English",
-                        TotalCopies = 8,
-                        AvailableCopies = 7,
-                        RackLocation = "A-33",
-                        CoverImage = "https://images-na.ssl-images-amazon.com/images/I/41xSh4sQ1OL._SX376_BO1,204,203,200_.jpg"
-                    },
-                    new Book
-                    {
-                        Id = Guid.NewGuid(),
-                        ISBN = "9780441172719",
-                        Title = "Dune",
-                        Author = "Frank Herbert",
-                        Publisher = "Chilton Books",
-                        Category = "Sci-Fi",
-                        Edition = "Classic Edition",
-                        Language = "English",
-                        TotalCopies = 5,
-                        AvailableCopies = 4,
-                        RackLocation = "B-12",
-                        CoverImage = "https://images-na.ssl-images-amazon.com/images/I/41m-n-8KxQL._SY291_BO1,204,203,200_QL40_FMwebp_.jpg"
-                    },
-                    new Book
-                    {
-                        Id = Guid.NewGuid(),
-                        ISBN = "9780062316097",
-                        Title = "Sapiens: A Brief History of Humankind",
-                        Author = "Yuval Noah Harari",
-                        Publisher = "Harper",
-                        Category = "History",
-                        Edition = "1st Edition",
-                        Language = "English",
-                        TotalCopies = 6,
-                        AvailableCopies = 5,
-                        RackLocation = "C-05",
-                        CoverImage = "https://images-na.ssl-images-amazon.com/images/I/41yu2qXhXXL._SX324_BO1,204,203,200_.jpg"
-                    },
-                    new Book
-                    {
-                        Id = Guid.NewGuid(),
-                        ISBN = "9780593157022",
-                        Title = "The Hobbit",
-                        Author = "J.R.R. Tolkien",
-                        Publisher = "George Allen & Unwin",
-                        Category = "Fantasy",
-                        Edition = "75th Anniversary",
-                        Language = "English",
-                        TotalCopies = 7,
-                        AvailableCopies = 7,
-                        RackLocation = "B-15",
-                        CoverImage = "https://images-na.ssl-images-amazon.com/images/I/51wXpMv-gEL._SX331_BO1,204,203,200_.jpg"
-                    }
-                };
+                    ISBN = "9780134685991",
+                    Title = "Effective Java",
+                    Author = "Joshua Bloch",
+                    Publisher = "Addison-Wesley",
+                    Category = "Programming",
+                    Edition = "3rd Edition",
+                    Language = "English",
+                    TotalCopies = 10,
+                    AvailableCopies = 9,
+                    RackLocation = "A-32",
+                    CoverImage = "https://covers.openlibrary.org/b/isbn/9780134685991-M.jpg"
+                },
+                new Book
+                {
+                    ISBN = "9780132350884",
+                    Title = "Clean Code",
+                    Author = "Robert C. Martin",
+                    Publisher = "Prentice Hall",
+                    Category = "Programming",
+                    Edition = "1st Edition",
+                    Language = "English",
+                    TotalCopies = 8,
+                    AvailableCopies = 7,
+                    RackLocation = "A-33",
+                    CoverImage = "https://covers.openlibrary.org/b/isbn/9780132350884-M.jpg"
+                },
+                new Book
+                {
+                    ISBN = "9780441172719",
+                    Title = "Dune",
+                    Author = "Frank Herbert",
+                    Publisher = "Chilton Books",
+                    Category = "Sci-Fi",
+                    Edition = "Classic Edition",
+                    Language = "English",
+                    TotalCopies = 5,
+                    AvailableCopies = 4,
+                    RackLocation = "B-12",
+                    CoverImage = "https://covers.openlibrary.org/b/isbn/9780441172719-M.jpg"
+                },
+                new Book
+                {
+                    ISBN = "9780062316097",
+                    Title = "Sapiens: A Brief History of Humankind",
+                    Author = "Yuval Noah Harari",
+                    Publisher = "Harper",
+                    Category = "History",
+                    Edition = "1st Edition",
+                    Language = "English",
+                    TotalCopies = 6,
+                    AvailableCopies = 5,
+                    RackLocation = "C-05",
+                    CoverImage = "https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
+                },
+                new Book
+                {
+                    ISBN = "9780593157022",
+                    Title = "The Hobbit",
+                    Author = "J.R.R. Tolkien",
+                    Publisher = "George Allen & Unwin",
+                    Category = "Fantasy",
+                    Edition = "75th Anniversary",
+                    Language = "English",
+                    TotalCopies = 7,
+                    AvailableCopies = 7,
+                    RackLocation = "B-15",
+                    CoverImage = "https://covers.openlibrary.org/b/isbn/9780593157022-M.jpg"
+                }
+            };
 
-                await context.Books.AddRangeAsync(books);
-                await context.SaveChangesAsync();
+            foreach (var b in booksToSeed)
+            {
+                var existing = await context.Books.FirstOrDefaultAsync(x => x.ISBN == b.ISBN);
+                if (existing == null)
+                {
+                    b.Id = Guid.NewGuid();
+                    await context.Books.AddAsync(b);
+                }
+                else
+                {
+                    existing.CoverImage = b.CoverImage; // Update cover URL
+                }
+            }
+            await context.SaveChangesAsync();
 
-                // Seed some Borrowing Transactions
-                var effectiveJava = books[0];
-                var cleanCode = books[1];
-                var dune = books[2];
-                var sapiens = books[3];
+            // Seed some Borrowing Transactions if none exist
+            if (!await context.BorrowingTransactions.AnyAsync())
+            {
+                var effectiveJava = await context.Books.FirstAsync(x => x.ISBN == "9780134685991");
+                var cleanCode = await context.Books.FirstAsync(x => x.ISBN == "9780132350884");
+                var dune = await context.Books.FirstAsync(x => x.ISBN == "9780441172719");
+                var sapiens = await context.Books.FirstAsync(x => x.ISBN == "9780062316097");
 
                 var transaction1 = new BorrowingTransaction
                 {
