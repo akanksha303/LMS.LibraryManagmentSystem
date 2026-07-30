@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -11,22 +11,22 @@ const api = axios.create({
 
 // Attach Authorization Token to requests if available
 api.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('lms_token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
+  (error: any) => {
     return Promise.reject(error);
   }
 );
 
 // Response interceptor to handle authentication failures
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
+  (response: AxiosResponse) => response,
+  (error: any) => {
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('lms_token');
       localStorage.removeItem('lms_user');

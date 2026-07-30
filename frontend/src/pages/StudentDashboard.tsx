@@ -371,12 +371,12 @@ const StudentDashboard: React.FC = () => {
                 <table className="w-full text-left border-collapse">
                   <thead>
                     <tr className="bg-brand-light-lavender border-b border-brand-lavender-border">
-                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Cover</th>
-                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Title</th>
-                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Author</th>
-                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Category</th>
-                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Status</th>
-                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider text-right">Actions</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Cover</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Title</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Author</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Category</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-brand-light-lavender">
@@ -492,7 +492,7 @@ const StudentDashboard: React.FC = () => {
 
             {/* Chat Messages */}
             <div className="flex-1 overflow-y-auto my-4 space-y-3 pr-2 scroll-smooth">
-              {chatLog.map((log, i) => (
+              {chatLog.map((log: { sender: 'user' | 'bot'; text: string }, i: number) => (
                 <div key={i} className={`flex ${log.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-xs ${
                     log.sender === 'user' 
@@ -519,7 +519,7 @@ const StudentDashboard: React.FC = () => {
               <input
                 type="text"
                 value={chatMessage}
-                onChange={(e) => setChatMessage(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setChatMessage(e.target.value)}
                 placeholder="Ask about programming books..."
                 className="flex-1 px-4 py-2.5 bg-white border border-brand-lavender-border rounded-xl text-xs text-brand-dark-text focus:outline-none focus:ring-1 focus:ring-brand-royal-violet focus:border-brand-royal-violet transition-colors"
               />
