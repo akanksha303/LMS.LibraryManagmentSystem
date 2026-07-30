@@ -5,7 +5,8 @@ import { BorrowingTransaction, Book } from '../types';
 import { 
   Home, BookOpen, FileText, Newspaper, ArrowLeft, ArrowRight,
   GraduationCap, Lock, Calendar, MessageSquare, Send, CheckCircle2,
-  AlertCircle, LogOut, Search, Sparkles
+  AlertCircle, LogOut, Search, Sparkles, SlidersHorizontal, Eye, 
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +27,22 @@ const StudentDashboard: React.FC = () => {
     { sender: 'bot', text: 'Hello! I am your AI Library Assistant. Ask me to recommend books or check account status!' }
   ]);
   const [isChatLoading, setIsChatLoading] = useState(false);
+
+  // Recommended Books states
+  const [bookSearch, setBookSearch] = useState('');
+  const [bookCategory, setBookCategory] = useState('All');
+  const [bookPage, setBookPage] = useState(1);
+  const booksPerPage = 3;
+
+  const filteredBooks = recommendations.filter(book => {
+    const matchesSearch = book.title.toLowerCase().includes(bookSearch.toLowerCase()) || 
+                          book.author.toLowerCase().includes(bookSearch.toLowerCase());
+    const matchesCategory = bookCategory === 'All' || book.category === bookCategory;
+    return matchesSearch && matchesCategory;
+  });
+
+  const totalPages = Math.ceil(filteredBooks.length / booksPerPage) || 1;
+  const paginatedBooks = filteredBooks.slice((bookPage - 1) * booksPerPage, bookPage * booksPerPage);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -289,10 +306,10 @@ const StudentDashboard: React.FC = () => {
         </div>
 
         {/* BOTTOM SECTIONS GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           
           {/* RECENT LIBRARY ACTIVITY SECTION & AI REC */}
-          <div className="space-y-8">
+          <div className="space-y-8 lg:col-span-2">
             <div className="space-y-4">
               <h3 className="text-lg font-bold text-brand-dark-text">Recent Library Activity</h3>
               <div className="border border-brand-light-lavender rounded-2xl p-6 space-y-6">
@@ -314,38 +331,155 @@ const StudentDashboard: React.FC = () => {
 
             {/* AI Recommendation Listing */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <h3 className="text-lg font-bold text-brand-dark-text flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-brand-royal-violet" />
                   Recommended Books
                 </h3>
+                
+                {/* Search and Category Filter */}
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <div className="relative flex-1 sm:flex-initial">
+                    <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={bookSearch}
+                      onChange={(e) => { setBookSearch(e.target.value); setBookPage(1); }}
+                      placeholder="Search recommended..."
+                      className="w-full pl-8 pr-4 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-[11px] text-brand-dark-text focus:outline-none focus:ring-1 focus:ring-brand-royal-violet focus:border-brand-royal-violet"
+                    />
+                  </div>
+                  <div className="relative">
+                    <select
+                      value={bookCategory}
+                      onChange={(e) => { setBookCategory(e.target.value); setBookPage(1); }}
+                      className="pl-3 pr-8 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-[11px] text-brand-dark-text focus:outline-none focus:ring-1 focus:ring-brand-royal-violet appearance-none"
+                    >
+                      <option value="All">All Genres</option>
+                      <option value="Programming">Programming</option>
+                      <option value="Sci-Fi">Sci-Fi</option>
+                      <option value="History">History</option>
+                      <option value="Fantasy">Fantasy</option>
+                    </select>
+                    <SlidersHorizontal className="w-3 h-3 text-gray-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                </div>
               </div>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {recommendations.map(book => (
-                  <div 
-                    key={book.id} 
-                    onClick={() => navigate('/catalog')}
-                    className="p-4 bg-gray-50 hover:bg-brand-light-lavender border border-transparent hover:border-brand-lavender-border rounded-2xl flex items-center gap-3.5 cursor-pointer transition-all"
-                  >
-                    {book.coverImage ? (
-                      <img src={book.coverImage} alt={book.title} className="w-10 h-14 object-cover rounded shadow-sm" />
+              {/* Books Data Table (Clean spacious layout) */}
+              <div className="bg-white border border-brand-lavender-border rounded-2xl overflow-hidden shadow-soft">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-brand-light-lavender border-b border-brand-lavender-border">
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Cover</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Title</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Author</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Category</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider">Status</th>
+                      <th className="px-4 py-3 text-[10px] font-bold text-gray-455 uppercase tracking-wider text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-brand-light-lavender">
+                    {paginatedBooks.length > 0 ? (
+                      paginatedBooks.map((book) => (
+                        <tr key={book.id} className="hover:bg-brand-light-lavender/5 transition-colors group">
+                          <td className="px-4 py-3.5">
+                            <div className="w-16 h-22 bg-purple-50 text-brand-royal-violet rounded-lg border border-purple-100/50 flex items-center justify-center overflow-hidden shadow-sm relative flex-shrink-0">
+                              {book.coverImage ? (
+                                <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
+                              ) : (
+                                <BookOpen className="w-6 h-6 text-brand-royal-violet/30" />
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-4 py-3.5 text-xs font-bold text-brand-dark-text">{book.title}</td>
+                          <td className="px-4 py-3.5 text-xs text-gray-500 font-medium">By {book.author}</td>
+                          <td className="px-4 py-3.5">
+                            <span className="inline-block px-2.5 py-0.5 bg-brand-royal-violet/15 text-brand-royal-violet border border-brand-lavender-border rounded-full text-[9px] font-bold uppercase tracking-wider">
+                              {book.category}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3.5 text-xs">
+                            {book.availableCopies > 0 ? (
+                              <span className="px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-[10px] font-bold">
+                                Available
+                              </span>
+                            ) : (
+                              <span className="px-2.5 py-1 bg-red-50 text-red-700 border border-red-200 rounded-full text-[10px] font-bold">
+                                Borrowed
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3.5 text-xs text-right space-x-2">
+                            <button 
+                              onClick={() => navigate('/catalog')}
+                              className="p-1.5 bg-white border border-gray-200 text-gray-400 hover:text-brand-royal-violet hover:border-brand-royal-violet/30 rounded-lg transition-colors shadow-sm inline-flex items-center justify-center align-middle"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                            </button>
+                            <button 
+                              onClick={() => navigate('/catalog')}
+                              className="px-3 py-1.5 bg-brand-royal-violet hover:bg-brand-royal-violet/90 text-white rounded-lg text-[10px] font-bold inline-flex items-center gap-1 transition-all shadow-soft align-middle"
+                            >
+                              <BookOpen className="w-3 h-3" />
+                              Borrow
+                            </button>
+                          </td>
+                        </tr>
+                      ))
                     ) : (
-                      <div className="w-10 h-14 bg-purple-200 text-brand-royal-violet rounded flex items-center justify-center text-xs font-bold font-mono">LMS</div>
+                      <tr>
+                        <td colSpan={6} className="px-4 py-8 text-center text-xs text-gray-400 font-bold">
+                          No recommended books matching filters.
+                        </td>
+                      </tr>
                     )}
-                    <div>
-                      <div className="font-bold text-xs text-brand-dark-text line-clamp-1">{book.title}</div>
-                      <div className="text-[10px] text-gray-500 line-clamp-1">By {book.author}</div>
-                      <div className="inline-block px-1.5 py-0.5 bg-brand-royal-violet/10 text-brand-royal-violet rounded text-[9px] font-bold mt-1.5">{book.category}</div>
-                    </div>
-                  </div>
-                ))}
+                  </tbody>
+                </table>
               </div>
+
+              {/* Table Pagination */}
+              {totalPages > 1 && (
+                <div className="flex justify-between items-center pt-2">
+                  <div className="text-[10px] text-gray-500 font-medium">
+                    Showing {paginatedBooks.length} of {filteredBooks.length} books
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <button 
+                      onClick={() => setBookPage(prev => Math.max(1, prev - 1))}
+                      disabled={bookPage === 1}
+                      className="w-7 h-7 bg-white hover:bg-gray-50 border border-gray-200 text-gray-500 rounded-lg flex items-center justify-center transition-colors shadow-sm disabled:opacity-50 disabled:pointer-events-none"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    {[...Array(totalPages)].map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setBookPage(i + 1)}
+                        className={`w-7 h-7 rounded-lg text-xs font-bold shadow-sm border transition-all ${
+                          bookPage === i + 1
+                            ? 'bg-brand-royal-violet border-brand-royal-violet text-white'
+                            : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50'
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+                    <button 
+                      onClick={() => setBookPage(prev => Math.min(totalPages, prev + 1))}
+                      disabled={bookPage === totalPages}
+                      className="w-7 h-7 bg-white hover:bg-gray-50 border border-gray-200 text-gray-500 rounded-lg flex items-center justify-center transition-colors shadow-sm disabled:opacity-50 disabled:pointer-events-none"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           {/* AI ASSISTANT CHAT BOT (Right Pane) */}
-          <div className="border border-brand-lavender-border bg-brand-light-lavender/30 rounded-3xl p-6 flex flex-col h-[400px] shadow-soft">
+          <div className="border border-brand-lavender-border bg-brand-light-lavender/30 rounded-3xl p-6 flex flex-col h-[400px] shadow-soft lg:col-span-1">
             <div className="flex items-center gap-2 pb-4 border-b border-brand-lavender-border">
               <div className="w-8 h-8 bg-brand-royal-violet text-white rounded-lg flex items-center justify-center">
                 <MessageSquare className="w-4 h-4" />
