@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourSecurePassword123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - db-data:/var/opt/mssql
+
+  backend-api:
+    build:
+      context: ./backend
+      dockerfile: Lms.Api/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=database;Database=LmsDb;User Id=sa;Password=YourSecurePassword123!;TrustServerCertificate=True
+      - UseSQLite=false
+      - Jwt__Key=YourSuperSecretProductionSigningKeyHere!!!
+      - Jwt__Issuer=LmsServer
+      - Jwt__Audience=LmsClient
+    ports:
+      - "5000:80"
+    depends_on:
+      - database
+
+  frontend-web:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend-api
+
+volumes:
+  db-data:
