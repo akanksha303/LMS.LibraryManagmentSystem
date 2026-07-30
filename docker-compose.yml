@@ -22,8 +22,9 @@ services:
       - Jwt__Key=YourSuperSecretProductionSigningKeyHere!!!
       - Jwt__Issuer=LmsServer
       - Jwt__Audience=LmsClient
+      - ASPNETCORE_URLS=http://+:5000
     ports:
-      - "5000:80"
+      - "5000:5000"
     depends_on:
       - database
 
